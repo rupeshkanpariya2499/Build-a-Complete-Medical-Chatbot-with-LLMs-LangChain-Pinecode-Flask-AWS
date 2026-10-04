@@ -1,8 +1,8 @@
 from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
 from typing import List
 from langchain.schema import Document
+import os
 
 
 # Extract text from PDF files
@@ -48,10 +48,17 @@ def text_split(minimal_docs):
 
 # Download the HuggingFace embeddings model
 def download_embeddings():
-    '''Download and return the HuggingFace embeddings model.
-    '''
-    model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    embeddings = HuggingFaceEmbeddings(
-        model_name=model_name
+    """Return the configured local or hosted embedding implementation."""
+    if os.getenv("EMBEDDING_PROVIDER", "openai").lower() == "local":
+        from langchain_community.embeddings import HuggingFaceEmbeddings
+
+        return HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+    from langchain_openai import OpenAIEmbeddings
+
+    embeddings = OpenAIEmbeddings(
+        model="text-embedding-3-small"
     )
     return embeddings

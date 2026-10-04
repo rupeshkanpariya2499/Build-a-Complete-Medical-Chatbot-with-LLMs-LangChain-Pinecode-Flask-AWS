@@ -30,6 +30,19 @@ pip install -r requirements.txt
 ```ini
 PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GROQ_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+The application uses OpenAI's hosted embeddings so Vercel does not need to
+bundle PyTorch or a local sentence-transformer model. Run `python store_index.py`
+after adding `OPENAI_API_KEY` to create the `medicalchatbot-openai` Pinecone index.
+
+For local development with the existing `medicalchatbot` index, install
+`requirements-local.txt` and set these values in `.env`:
+
+```ini
+EMBEDDING_PROVIDER=local
+PINECONE_INDEX_NAME=medicalchatbot
 ```
 
 

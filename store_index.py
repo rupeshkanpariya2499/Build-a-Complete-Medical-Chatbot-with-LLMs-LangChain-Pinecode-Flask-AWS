@@ -9,9 +9,12 @@ load_dotenv()
 
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 os.environ["GROQ_API_KEY"] = GROQ_API_KEY
+if OPENAI_API_KEY:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 extracted_data = load_pdf_files("data")
 minimal_docs = filter_to_minimal_docs(extracted_data)
@@ -22,12 +25,12 @@ embeddings = download_embeddings()
 pinecone_api_key = PINECONE_API_KEY
 pc = Pinecone(api_key=pinecone_api_key)
 
-index_name = "medicalchatbot"
+index_name = os.getenv("PINECONE_INDEX_NAME", "medicalchatbot-openai")
 
 if not pc.has_index(index_name):
     pc.create_index(
         name=index_name,
-        dimension=384,
+        dimension=1536,
         metric="cosine",  # Cosine similarity metric
         spec=ServerlessSpec(cloud="aws", region="us-east-1")
     )
