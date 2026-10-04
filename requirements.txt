@@ -7,3 +7,4 @@ langchain-pinecone==0.2.8
 langchain-groq==0.2.4
 langchain-openai==0.3.24
 langchain-community==0.3.26
+wikipedia==1.4.0
